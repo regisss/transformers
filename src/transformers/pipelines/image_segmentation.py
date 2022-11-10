@@ -151,6 +151,10 @@ class ImageSegmentationPipeline(Pipeline):
                 annotation.append({"score": score, "label": label, "mask": mask})
 
         elif subtask in {"semantic", None} and hasattr(self.feature_extractor, "post_process_semantic_segmentation"):
+
+            np.save("logits", model_outputs.logits.numpy())
+            np.save("pred_masks", model_outputs.pred_masks.numpy())
+
             outputs = self.feature_extractor.post_process_semantic_segmentation(
                 model_outputs, target_sizes=model_outputs["target_size"]
             )[0]
