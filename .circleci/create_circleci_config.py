@@ -107,6 +107,7 @@ class CircleCIJob:
         if self.marker is not None:
             test_command += f" -m {self.marker}"
         test_command += " | tee tests_output.txt"
+        test_command = "python -m pytest -sv tests/pipelines/test_pipelines_image_segmentation.py::ImageSegmentationPipelineTests::test_small_model_pt"
         steps.append({"run": {"name": "Run tests", "command": test_command}})
         steps.append({"store_artifacts": {"path": "~/transformers/tests_output.txt"}})
         steps.append({"store_artifacts": {"path": "~/transformers/reports"}})
