@@ -1187,8 +1187,14 @@ class DetrFeatureExtractor(FeatureExtractionMixin, ImageFeatureExtractionMixin):
         masks_classes = class_queries_logits.softmax(dim=-1)[..., :-1]
         masks_probs = masks_queries_logits.sigmoid()  # [batch_size, num_queries, height, width]
 
+        np.save("masks_classes", masks_classes.numpy())
+        np.save("masks_probs", masks_probs.numpy())
+
         # Semantic segmentation logits of shape (batch_size, num_classes, height, width)
         segmentation = torch.einsum("bqc, bqhw -> bchw", masks_classes, masks_probs)
+
+        np.save("segmentation", segmentation.numpy())
+
         batch_size = class_queries_logits.shape[0]
 
         # Resize logits and compute semantic segmentation maps
@@ -1203,10 +1209,16 @@ class DetrFeatureExtractor(FeatureExtractionMixin, ImageFeatureExtractionMixin):
                 resized_logits = nn.functional.interpolate(
                     segmentation[idx].unsqueeze(dim=0), size=target_sizes[idx], mode="bilinear", align_corners=False
                 )
+                np.save(f"resized_logits_{idx}", resized_logits.numpy())
+
                 semantic_map = resized_logits[0].argmax(dim=0)
+                np.save(f"semantic_map_{idx}", semantic_map.numpy())
+
                 semantic_segmentation.append(semantic_map)
         else:
             semantic_segmentation = segmentation.argmax(dim=1)
+            np.save(f"semantic_segmentation", semantic_segmentation.numpy())
+
             semantic_segmentation = [semantic_segmentation[i] for i in range(semantic_segmentation.shape[0])]
 
         return semantic_segmentation
