@@ -113,6 +113,13 @@ class CircleCIJob:
         steps.append({"store_artifacts": {"path": "~/transformers/reports"}})
         steps.append({"store_artifacts": {"path": "~/transformers/logits.npy"}})
         steps.append({"store_artifacts": {"path": "~/transformers/pred_masks.npy"}})
+
+        steps.append({"store_artifacts": {"path": "~/transformers/circle_masks_classes.npy"}})
+        steps.append({"store_artifacts": {"path": "~/transformers/circle_masks_probs.npy"}})
+        steps.append({"store_artifacts": {"path": "~/transformers/circle_segmentation.npy"}})
+        steps.append({"store_artifacts": {"path": "~/transformers/circle_resized_logits_0.npy"}})
+        steps.append({"store_artifacts": {"path": "~/transformers/circle_semantic_map_0.npy"}})
+
         # steps.append({"store_artifacts": {"path": "~/transformers/output_mask_0.png"}})
         # steps.append({"store_artifacts": {"path": "~/transformers/output_mask_1.png"}})
         # steps.append({"store_artifacts": {"path": "~/transformers/output_mask_2.png"}})
