@@ -110,6 +110,12 @@ class CircleCIJob:
         steps.append({"run": {"name": "Run tests", "command": test_command}})
         steps.append({"store_artifacts": {"path": "~/transformers/tests_output.txt"}})
         steps.append({"store_artifacts": {"path": "~/transformers/reports"}})
+        steps.append({"store_artifacts": {"path": "~/transformers/output_mask_0.png"}})
+        steps.append({"store_artifacts": {"path": "~/transformers/output_mask_1.png"}})
+        steps.append({"store_artifacts": {"path": "~/transformers/output_mask_2.png"}})
+        steps.append({"store_artifacts": {"path": "~/transformers/output_mask_0.npy"}})
+        steps.append({"store_artifacts": {"path": "~/transformers/output_mask_1.npy"}})
+        steps.append({"store_artifacts": {"path": "~/transformers/output_mask_2.npy"}})
         job["steps"] = steps
         return job
 
