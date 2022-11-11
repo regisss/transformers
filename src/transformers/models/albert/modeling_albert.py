@@ -464,11 +464,13 @@ class AlbertTransformer(nn.Module):
         return_dict: bool = True,
     ) -> Union[BaseModelOutput, Tuple]:
         hidden_states = self.embedding_hidden_mapping_in(hidden_states)
+        print("HIDDEN STATES", hidden_states)
 
         all_hidden_states = (hidden_states,) if output_hidden_states else None
         all_attentions = () if output_attentions else None
 
         head_mask = [None] * self.config.num_hidden_layers if head_mask is None else head_mask
+        print("HEAD MASK", head_mask)
 
         for i in range(self.config.num_hidden_layers):
             # Number of layers in a hidden group
@@ -485,6 +487,7 @@ class AlbertTransformer(nn.Module):
                 output_hidden_states,
             )
             hidden_states = layer_group_output[0]
+            print("HIDDEN STATES", i, hidden_states)
 
             if output_attentions:
                 all_attentions = all_attentions + layer_group_output[-1]
@@ -725,9 +728,7 @@ class AlbertModel(AlbertPreTrainedModel):
         extended_attention_mask = attention_mask.unsqueeze(1).unsqueeze(2)
         extended_attention_mask = extended_attention_mask.to(dtype=self.dtype)  # fp16 compatibility
         extended_attention_mask = (1.0 - extended_attention_mask) * torch.finfo(self.dtype).min
-        print("EXTENDED ATTENTION MASK", extended_attention_mask.shape, extended_attention_mask.dtype, extended_attention_mask)
         head_mask = self.get_head_mask(head_mask, self.config.num_hidden_layers)
-        print("HEAD MASK", len(head_mask), head_mask[0].dtype, head_mask)
 
         embedding_output = self.embeddings(
             input_ids, position_ids=position_ids, token_type_ids=token_type_ids, inputs_embeds=inputs_embeds
@@ -1269,8 +1270,6 @@ class AlbertForQuestionAnswering(AlbertPreTrainedModel):
         """
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
 
-        print("INPUT IDS", input_ids.shape, input_ids.dtype, input_ids)
-
         outputs = self.albert(
             input_ids=input_ids,
             attention_mask=attention_mask,
@@ -1284,10 +1283,8 @@ class AlbertForQuestionAnswering(AlbertPreTrainedModel):
         )
 
         sequence_output = outputs[0]
-        print("SEQUENCE OUPTUT", sequence_output.shape, sequence_output.dtype, sequence_output)
 
         logits: torch.Tensor = self.qa_outputs(sequence_output)
-        print("LOGITS", logits.shape, logits.dtype, logits)
         start_logits, end_logits = logits.split(1, dim=-1)
         start_logits = start_logits.squeeze(-1).contiguous()
         end_logits = end_logits.squeeze(-1).contiguous()
