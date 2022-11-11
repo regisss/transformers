@@ -406,8 +406,11 @@ class AlbertLayer(nn.Module):
 
     def ff_chunk(self, attention_output: torch.Tensor) -> torch.Tensor:
         ffn_output = self.ffn(attention_output)
+        print("FFN OUTPUT 1", ffn_output.shape, ffn_output)
         ffn_output = self.activation(ffn_output)
+        print("FFN OUTPUT 2", ffn_output.shape, ffn_output)
         ffn_output = self.ffn_output(ffn_output)
+        print("FFN OUTPUT 3", ffn_output.shape, ffn_output)
         return ffn_output
 
 
@@ -464,13 +467,11 @@ class AlbertTransformer(nn.Module):
         return_dict: bool = True,
     ) -> Union[BaseModelOutput, Tuple]:
         hidden_states = self.embedding_hidden_mapping_in(hidden_states)
-        print("HIDDEN STATES", hidden_states)
 
         all_hidden_states = (hidden_states,) if output_hidden_states else None
         all_attentions = () if output_attentions else None
 
         head_mask = [None] * self.config.num_hidden_layers if head_mask is None else head_mask
-        print("HEAD MASK", head_mask)
 
         for i in range(self.config.num_hidden_layers):
             # Number of layers in a hidden group
@@ -487,7 +488,6 @@ class AlbertTransformer(nn.Module):
                 output_hidden_states,
             )
             hidden_states = layer_group_output[0]
-            print("HIDDEN STATES", i, hidden_states)
 
             if output_attentions:
                 all_attentions = all_attentions + layer_group_output[-1]
