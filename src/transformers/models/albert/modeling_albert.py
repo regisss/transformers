@@ -394,7 +394,7 @@ class AlbertLayer(nn.Module):
     ) -> Tuple[torch.Tensor, torch.Tensor]:
         print("HIDDEN STATES", hidden_states.shape, hidden_states.dtype, hidden_states)
         attention_output = self.attention(hidden_states, attention_mask, head_mask, output_attentions)
-        print("ATTENTION OUTPUT", attention_output.shape, attention_output.dtype, attention_output)
+        print("ATTENTION OUTPUT", attention_output[0].shape, attention_output[0].dtype, attention_output[0])
 
         ffn_output = apply_chunking_to_forward(
             self.ff_chunk,
