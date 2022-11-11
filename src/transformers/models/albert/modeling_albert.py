@@ -727,7 +727,7 @@ class AlbertModel(AlbertPreTrainedModel):
         extended_attention_mask = (1.0 - extended_attention_mask) * torch.finfo(self.dtype).min
         print("EXTENDED ATTENTION MASK", extended_attention_mask.shape, extended_attention_mask.dtype, extended_attention_mask)
         head_mask = self.get_head_mask(head_mask, self.config.num_hidden_layers)
-        print("HEAD MASK", head_mask.shape, head_mask.dtype, head_mask)
+        print("HEAD MASK", len(head_mask), head_mask[0].dtype, head_mask)
 
         embedding_output = self.embeddings(
             input_ids, position_ids=position_ids, token_type_ids=token_type_ids, inputs_embeds=inputs_embeds
