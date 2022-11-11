@@ -392,7 +392,9 @@ class AlbertLayer(nn.Module):
         output_attentions: bool = False,
         output_hidden_states: bool = False,
     ) -> Tuple[torch.Tensor, torch.Tensor]:
+        print("HIDDEN STATES", hidden_states.shape, hidden_states.dtype, hidden_states)
         attention_output = self.attention(hidden_states, attention_mask, head_mask, output_attentions)
+        print("ATTENTION OUTPUT", attention_output.shape, attention_output.dtype, attention_output)
 
         ffn_output = apply_chunking_to_forward(
             self.ff_chunk,
@@ -406,11 +408,11 @@ class AlbertLayer(nn.Module):
 
     def ff_chunk(self, attention_output: torch.Tensor) -> torch.Tensor:
         ffn_output = self.ffn(attention_output)
-        print("FFN OUTPUT 1", ffn_output.shape, ffn_output)
+        # print("FFN OUTPUT 1", ffn_output.shape, ffn_output)
         ffn_output = self.activation(ffn_output)
-        print("FFN OUTPUT 2", ffn_output.shape, ffn_output)
+        # print("FFN OUTPUT 2", ffn_output.shape, ffn_output)
         ffn_output = self.ffn_output(ffn_output)
-        print("FFN OUTPUT 3", ffn_output.shape, ffn_output)
+        # print("FFN OUTPUT 3", ffn_output.shape, ffn_output)
         return ffn_output
 
 
