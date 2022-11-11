@@ -1267,6 +1267,8 @@ class AlbertForQuestionAnswering(AlbertPreTrainedModel):
         """
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
 
+        print("INPUT IDS", input_ids.shape, input_ids.dtype, input_ids)
+
         outputs = self.albert(
             input_ids=input_ids,
             attention_mask=attention_mask,
@@ -1280,8 +1282,10 @@ class AlbertForQuestionAnswering(AlbertPreTrainedModel):
         )
 
         sequence_output = outputs[0]
+        print("SEQUENCE OUPTUT", sequence_output.shape, sequence_output.dtype, sequence_output)
 
         logits: torch.Tensor = self.qa_outputs(sequence_output)
+        print("LOGITS", logits.shape, logits.dtype, logits)
         start_logits, end_logits = logits.split(1, dim=-1)
         start_logits = start_logits.squeeze(-1).contiguous()
         end_logits = end_logits.squeeze(-1).contiguous()
