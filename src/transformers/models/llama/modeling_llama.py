@@ -151,7 +151,7 @@ class LlamaLinearScalingRotaryEmbedding(LlamaRotaryEmbedding):
     """LlamaRotaryEmbedding extended with linear scaling. Credits to the Reddit user /u/kaiokendev"""
 
     def forward(self, x, position_ids, seq_len=None):
-        # difference to the original RoPE: a scaling factor is aplied to the position ids
+        # difference to the original RoPE: a scaling factor is applied to the position ids
         position_ids = position_ids.float() / self.scaling_factor
         cos, sin = super().forward(x, position_ids, seq_len)
         return cos, sin
